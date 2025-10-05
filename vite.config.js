@@ -10,7 +10,7 @@ export default {
         proxy: {
             // Proxy vers le backend pour les appels API
             '/api': {
-                target: 'http://localhost:3001',
+                target: 'https://backend-space.onrender.com',
                 changeOrigin: true
             }
         }

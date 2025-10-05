@@ -6,7 +6,6 @@
 [![Vite](https://img.shields.io/badge/Vite-4.5.0-646CFF)](https://vitejs.dev/)
 [![Three.js](https://img.shields.io/badge/Three.js-0.160.0-000000)](https://threejs.org/)
 
-![Solar System Explorer Preview](images/solar_system.png)
 
 ## 📖 Description
 
@@ -59,7 +58,7 @@ Solar System Explorer is an interactive 3D web application that allows you to ex
 
 ```bash
 git clone [REPO_URL]
-cd Space-HUGUES_face_de_pet
+cd visualize3D
 ```
 
 2. **Install dependencies**
@@ -109,8 +108,8 @@ npm run dev
 
 1. **Solar System**: Default home page
 2. **Kepler Systems**: Accessible via search or direct URL
-   - URL format: `/#/kepler/Kepler-11`
-   - Example: `http://localhost:5173/#/kepler/Kepler-186`
+   - URL format: `/Kepler-11`
+   - Example: `http://localhost:5173/Kepler-186`
 
 ### Control Panel
 
