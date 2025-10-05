@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Chatbot Production</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #00ff00;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        button {
+            background: #333;
+            color: #00ff00;
+            border: 1px solid #555;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin: 5px;
+            border-radius: 3px;
+        }
+        button:hover {
+            background: #444;
+        }
+        .result {
+            background: #002200;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 3px;
+            white-space: pre-wrap;
+        }
+        .error {
+            background: #220000;
+            color: #ff4444;
+        }
+        input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            background: #333;
+            color: #00ff00;
+            border: 1px solid #555;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 Test Chatbot Production</h1>
+        
+        <div class="test-section">
+            <h2>Configuration détectée</h2>
+            <div id="config-info"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Test 1: Health Check Backend</h2>
+            <button onclick="testHealthCheck()">Tester Health Check</button>
+            <div id="health-result" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Test 2: Endpoint Test Chatbot</h2>
+            <button onclick="testChatbotEndpoint()">Tester /api/chat/test</button>
+            <div id="test-result" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Test 3: Message Chatbot</h2>
+            <input type="text" id="messageInput" placeholder="Tapez votre message..." value="Hello, can you help me learn about exoplanets?">
+            <button onclick="testChatbotMessage()">Envoyer Message</button>
+            <div id="message-result" class="result"></div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration automatique
+        const isProduction = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+        const backendUrl = isProduction ? 'https://backend-space.onrender.com' : 'http://localhost:3001';
+        
+        // Afficher la configuration
+        document.getElementById('config-info').innerHTML = `
+Environment: ${isProduction ? 'PRODUCTION' : 'DEVELOPMENT'}
+Backend URL: ${backendUrl}
+Current domain: ${window.location.hostname}
+        `;
+
+        async function testHealthCheck() {
+            const resultDiv = document.getElementById('health-result');
+            resultDiv.innerHTML = 'Testing...';
+            
+            try {
+                const response = await fetch(`${backendUrl}/health`);
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `✅ SUCCESS (${response.status}):\n${JSON.stringify(data, null, 2)}`;
+                resultDiv.className = 'result';
+            } catch (error) {
+                resultDiv.innerHTML = `❌ ERROR:\n${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+
+        async function testChatbotEndpoint() {
+            const resultDiv = document.getElementById('test-result');
+            resultDiv.innerHTML = 'Testing...';
+            
+            try {
+                const response = await fetch(`${backendUrl}/api/chat/test`);
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `✅ SUCCESS (${response.status}):\n${JSON.stringify(data, null, 2)}`;
+                resultDiv.className = 'result';
+            } catch (error) {
+                resultDiv.innerHTML = `❌ ERROR:\n${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+
+        async function testChatbotMessage() {
+            const resultDiv = document.getElementById('message-result');
+            const message = document.getElementById('messageInput').value;
+            resultDiv.innerHTML = 'Sending message...';
+            
+            try {
+                const response = await fetch(`${backendUrl}/api/chat/send`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        conversationHistory: []
+                    })
+                });
+                
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `✅ SUCCESS (${response.status}):\nMessage: "${message}"\nResponse: "${data.data?.botResponse || 'No response'}"\n\nFull data:\n${JSON.stringify(data, null, 2)}`;
+                resultDiv.className = 'result';
+            } catch (error) {
+                resultDiv.innerHTML = `❌ ERROR:\n${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+
+        // Auto-test au chargement
+        setTimeout(() => {
+            testHealthCheck();
+        }, 500);
+    </script>
+</body>
+</html>

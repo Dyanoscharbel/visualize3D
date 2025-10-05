@@ -6330,10 +6330,14 @@ console.log("✅ Keyboard shortcuts configured:");
 
     // Backend calling helper aligned with backend routes
     const callBackend = async (promptText) => {
+      // Import API config dynamically
+      const isProduction = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+      const backendUrl = isProduction ? 'https://backend-space.onrender.com' : 'http://localhost:3001';
+      
       // Preferred endpoint
-      const preferred = window.CHATBOT_API_ENDPOINT || '/api/chat/send';
+      const preferred = window.CHATBOT_API_ENDPOINT || `${backendUrl}/api/chat/send`;
       // Fallback endpoint using conversation API
-      const fallbackConversation = '/api/chat/conversation';
+      const fallbackConversation = `${backendUrl}/api/chat/conversation`;
 
       // Try /api/chat/send
       try {

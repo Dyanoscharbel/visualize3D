@@ -1,9 +1,11 @@
+import { API_CONFIG, buildApiUrl } from '../config/api.js';
+
 /**
  * Service pour communiquer avec l'API backend des exoplanètes
  */
 export class ExoplanetAPIService {
     
-    constructor(baseURL = 'https://backend-space.onrender.com/api') {
+    constructor(baseURL = buildApiUrl(API_CONFIG.ENDPOINTS.EXOPLANETS)) {
         this.baseURL = baseURL;
     }
     
