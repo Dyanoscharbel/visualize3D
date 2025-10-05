@@ -3,7 +3,7 @@
  */
 export class ExoplanetAPIService {
     
-    constructor(baseURL = 'http://localhost:3001/api') {
+    constructor(baseURL = 'https://backend-space.onrender.com') {
         this.baseURL = baseURL;
     }
     
