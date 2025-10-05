@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar System Explorer - HUD Interface</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/hud.css">
+</head>
+<body>
+    <!-- HUD Loading Screen -->
+    <div id="hud-loading" class="hud-loading">
+        <div class="loading-container">
+            <div class="radar-scanner">
+                <div class="radar-sweep"></div>
+                <div class="radar-grid">
+                    <div class="grid-line"></div>
+                    <div class="grid-line"></div>
+                    <div class="grid-line"></div>
+                    <div class="grid-line"></div>
+                </div>
+                <div class="radar-center"></div>
+            </div>
+            <div class="loading-text">
+                <h2>SYSTÈME SOLAIRE</h2>
+                <div class="loading-bar">
+                    <div class="loading-fill" id="loading-fill"></div>
+                    <div class="loading-percentage" id="loading-percentage">0%</div>
+                </div>
+                <p id="loading-status">INITIALISATION DES SYSTÈMES...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main HUD Interface -->
+    <div id="hud-interface" class="hud-interface">
+        <!-- Top HUD Bar -->
+        <div class="hud-top-bar">
+            <div class="hud-section">
+                <div class="hud-title">
+                    <span class="title-icon">◉</span>
+                    <span class="title-text">SOLAR SYSTEM EXPLORER</span>
+                    <div class="title-status online">ONLINE</div>
+                </div>
+            </div>
+            
+            <div class="hud-section center">
+                <div class="navigation-mode">
+                    <button class="nav-mode active" data-mode="exploration">EXPLORATION</button>
+                    <button class="nav-mode" data-mode="analysis">ANALYSE IA</button>
+                    <button class="nav-mode" data-mode="data">DONNÉES NASA</button>
+                </div>
+            </div>
+            
+            <div class="hud-section">
+                <div class="system-status">
+                    <div class="status-item">
+                        <span class="status-label">MOTEUR 3D</span>
+                        <div class="status-indicator active"></div>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">DONNÉES</span>
+                        <div class="status-indicator active"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3D Canvas Container -->
+        <div id="canvas-container" class="canvas-container">
+            <!-- Canvas THREE.js sera injecté ici -->
+            
+            <!-- Planet Labels Overlay -->
+            <div id="planet-labels" class="planet-labels"></div>
+            
+            <!-- Crosshair -->
+            <div class="crosshair">
+                <div class="crosshair-h"></div>
+                <div class="crosshair-v"></div>
+                <div class="crosshair-center"></div>
+            </div>
+        </div>
+
+        <!-- Sidebar Toggle Button -->
+        <button id="sidebar-toggle" class="sidebar-toggle-btn">
+            <span class="toggle-icon">≡</span>
+        </button>
+
+        <!-- Left HUD Panel -->
+        <div class="hud-left-panel" id="hud-left-panel">
+            <!-- Radar Mini-Map -->
+            <div class="hud-widget radar-widget">
+                <div class="widget-header">
+                    <span class="widget-title">RADAR SYSTÈME</span>
+                    <div class="widget-controls">
+                        <button class="widget-btn" id="radar-zoom-in">+</button>
+                        <button class="widget-btn" id="radar-zoom-out">-</button>
+                    </div>
+                </div>
+                <div class="radar-display" id="radar-display">
+                    <div class="radar-sweep-mini"></div>
+                    <div class="radar-objects"></div>
+                </div>
+            </div>
+
+            <!-- System Controls -->
+            <div class="hud-widget controls-widget">
+                <div class="widget-header">
+                    <span class="widget-title">CONTRÔLES SYSTÈME</span>
+                </div>
+                <div class="widget-content">
+                    <div class="control-group">
+                        <label class="control-label">VITESSE ORBITALE</label>
+                        <div class="hud-slider">
+                            <input type="range" id="orbit-speed" min="0" max="10" value="1" step="0.1">
+                            <div class="slider-track"></div>
+                            <div class="slider-value">1.0x</div>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label class="control-label">VITESSE ROTATION</label>
+                        <div class="hud-slider">
+                            <input type="range" id="rotation-speed" min="0" max="10" value="1" step="0.1">
+                            <div class="slider-track"></div>
+                            <div class="slider-value">1.0x</div>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label class="control-label">ÉCHELLE VISUELLE</label>
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="scale-toggle" checked>
+                            <label for="scale-toggle" class="switch-label">
+                                <span class="switch-text">OPTIMISÉE</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View Modes -->
+            <div class="hud-widget view-widget">
+                <div class="widget-header">
+                    <span class="widget-title">MODES DE VUE</span>
+                </div>
+                <div class="widget-content">
+                    <button class="view-mode-btn active" data-view="overview">
+                        <span class="btn-icon">⊙</span>
+                        <span class="btn-text">VUE GÉNÉRALE</span>
+                    </button>
+                    <button class="view-mode-btn" data-view="inner">
+                        <span class="btn-icon">◉</span>
+                        <span class="btn-text">SYSTÈME INTERNE</span>
+                    </button>
+                    <button class="view-mode-btn" data-view="outer">
+                        <span class="btn-icon">○</span>
+                        <span class="btn-text">SYSTÈME EXTERNE</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right HUD Panel -->
+        <div class="hud-right-panel" id="hud-right-panel">
+            <!-- Object Information -->
+            <div class="hud-widget info-widget">
+                <div class="widget-header">
+                    <span class="widget-title">DONNÉES OBJET</span>
+                    <button class="widget-btn close-btn" id="close-info">×</button>
+                </div>
+                <div class="widget-content" id="object-info-content">
+                    <div class="no-selection">
+                        <div class="no-selection-icon">◎</div>
+                        <p>SÉLECTIONNEZ UN OBJET CÉLESTE</p>
+                        <small>Cliquez sur une planète pour afficher ses données</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Graphs -->
+            <div class="hud-widget graph-widget">
+                <div class="widget-header">
+                    <span class="widget-title">ANALYSE GRAPHIQUE</span>
+                </div>
+                <div class="widget-content">
+                    <div class="graph-container" id="data-graphs">
+                        <div class="graph-placeholder">
+                            <div class="graph-icon">📊</div>
+                            <p>GRAPHIQUES DISPONIBLES APRÈS SÉLECTION</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom HUD Bar -->
+        <div class="hud-bottom-bar">
+            <div class="hud-section">
+                <div class="search-console">
+                    <div class="console-prompt">></div>
+                    <input type="text" id="command-input" placeholder="Rechercher objet ou commande..." class="console-input">
+                    <div class="search-results" id="search-results"></div>
+                </div>
+            </div>
+            
+            <div class="hud-section center">
+                <div class="coordinates-display">
+                    <div class="coord-item">
+                        <span class="coord-label">X:</span>
+                        <span class="coord-value" id="cam-x">0.00</span>
+                    </div>
+                    <div class="coord-item">
+                        <span class="coord-label">Y:</span>
+                        <span class="coord-value" id="cam-y">0.00</span>
+                    </div>
+                    <div class="coord-item">
+                        <span class="coord-label">Z:</span>
+                        <span class="coord-value" id="cam-z">0.00</span>
+                    </div>
+                    <div class="coord-item">
+                        <span class="coord-label">ZOOM:</span>
+                        <span class="coord-value" id="cam-zoom">1.0x</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hud-section">
+                <div class="quick-actions">
+                    <button class="action-btn" id="pause-btn" title="Pause/Play [ESPACE]">
+                        <span class="btn-icon">⏸</span>
+                    </button>
+                    <button class="action-btn" id="reset-btn" title="Reset Vue [R]">
+                        <span class="btn-icon">⟲</span>
+                    </button>
+                    <button class="action-btn" id="fullscreen-btn" title="Plein Écran [F11]">
+                        <span class="btn-icon">⛶</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orbit Visualization Toggle -->
+        <div class="orbit-controls">
+            <button class="orbit-toggle" id="orbit-toggle">
+                <span class="toggle-icon">○</span>
+                <span class="toggle-text">ORBITES</span>
+            </button>
+            <button class="orbit-toggle" id="labels-toggle">
+                <span class="toggle-icon">🏷</span>
+                <span class="toggle-text">LABELS</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/sidebar-toggle.js"></script>
+    <script type="module" src="js/hud-main.js"></script>
+</body>
+</html>

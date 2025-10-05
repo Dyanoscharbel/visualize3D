@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar System Explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== RESET ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: #000;
+            font-family: 'Orbitron', monospace;
+            color: #00ffff;
+        }
+
+        /* ===== CANVAS CONTAINER ===== */
+        #canvas-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        /* ===== PLANET TOOLTIP ===== */
+        .planet-tooltip {
+            position: absolute;
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(0, 128, 255, 0.1) 100%);
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(15px);
+            box-shadow: 
+                0 0 30px rgba(0, 255, 255, 0.5),
+                inset 0 0 20px rgba(0, 255, 255, 0.1);
+            min-width: 300px;
+            max-width: 400px;
+            z-index: 1000;
+            opacity: 0;
+            transform: scale(0.8) translateY(20px);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            pointer-events: none;
+        }
+
+        .planet-tooltip.show {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: auto;
+        }
+
+        .tooltip-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .tooltip-icon {
+            width: 50px;
+            height: 50px;
+            background: #00ffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .tooltip-title {
+            flex: 1;
+        }
+
+        .tooltip-name {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #00ffff;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .tooltip-type {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem;
+            color: #0080ff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tooltip-close {
+            width: 30px;
+            height: 30px;
+            background: transparent;
+            border: 1px solid #00ffff;
+            border-radius: 50%;
+            color: #00ffff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .tooltip-close:hover {
+            background: #00ffff;
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+        }
+
+        .tooltip-content {
+            display: grid;
+            gap: 12px;
+        }
+
+        .tooltip-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+        }
+
+        .tooltip-info:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.85rem;
+            color: #0080ff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .info-value {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem;
+            color: #00ffff;
+            font-weight: 700;
+            text-align: right;
+        }
+
+        .tooltip-description {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0, 255, 255, 0.3);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #80c0ff;
+        }
+
+        .more-info-btn {
+            margin-top: 15px;
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, #00ffff, #0080ff);
+            border: none;
+            border-radius: 8px;
+            color: #000;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        .more-info-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 30px rgba(0, 255, 255, 0.6);
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes pulse {
+            0%, 100% { 
+                opacity: 1; 
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.7; 
+                transform: scale(1.05);
+            }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .planet-tooltip {
+                min-width: 280px;
+                max-width: 320px;
+                padding: 15px;
+            }
+            
+            .tooltip-name {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Canvas Container -->
+    <div id="canvas-container"></div>
+
+    <!-- Planet Tooltip (Hidden by default) -->
+    <div id="planet-tooltip" class="planet-tooltip">
+        <div class="tooltip-header">
+            <div class="tooltip-icon">🪐</div>
+            <div class="tooltip-title">
+                <div class="tooltip-name" id="tooltip-name">Planète</div>
+                <div class="tooltip-type" id="tooltip-type">Objet Céleste</div>
+            </div>
+            <button class="tooltip-close" id="tooltip-close">×</button>
+        </div>
+        
+        <div class="tooltip-content" id="tooltip-content">
+            <!-- Content will be dynamically generated -->
+        </div>
+        
+        <div class="tooltip-description" id="tooltip-description">
+            <!-- Description will be dynamically generated -->
+        </div>
+        
+        <button class="more-info-btn" id="more-info-btn">
+            En savoir plus
+        </button>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="./script.js"></script>
+</body>
+</html>

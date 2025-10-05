@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🪐 Test Exoplanètes 3D - Kepler Systems</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 350px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .canvas-area {
+            flex: 1;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            opacity: 0.7;
+            margin-bottom: 20px;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .section h2 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #7CFC00;
+        }
+
+        .button {
+            width: 100%;
+            padding: 12px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .info-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 3px solid #7CFC00;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #7CFC00;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .legend {
+            display: grid;
+            grid-template-columns: 20px 1fr;
+            gap: 8px;
+            align-items: center;
+            font-size: 12px;
+            margin: 5px 0;
+        }
+
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        .instructions {
+            font-size: 12px;
+            line-height: 1.6;
+            opacity: 0.8;
+        }
+
+        code {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+        }
+
+        .console-output {
+            background: #1e1e1e;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            padding: 10px;
+            border-radius: 5px;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h1>🪐 Exoplanètes 3D</h1>
+            <div class="subtitle">Test des systèmes Kepler avec orbites colorées</div>
+
+            <div class="status">
+                <div class="status-indicator"></div>
+                <div>
+                    <strong>Système prêt</strong><br>
+                    <small>Cliquez sur un système pour commencer</small>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🌌 Systèmes Kepler Populaires</h2>
+                <button class="button" onclick="loadSystem('Kepler-11')">
+                    Kepler-11 (6 planètes)
+                </button>
+                <button class="button" onclick="loadSystem('Kepler-186')">
+                    Kepler-186 (5 planètes - Zone habitable)
+                </button>
+                <button class="button" onclick="loadSystem('Kepler-90')">
+                    Kepler-90 (8 planètes - Record!)
+                </button>
+                <button class="button" onclick="loadSystem('Kepler-20')">
+                    Kepler-20 (5 planètes)
+                </button>
+                <button class="button" onclick="loadSystem('Kepler-62')">
+                    Kepler-62 (5 planètes - 2 habitables)
+                </button>
+            </div>
+
+            <div class="section">
+                <h2>🎨 Légende des Couleurs d'Orbites</h2>
+                <div class="legend">
+                    <div class="color-box" style="background: #7CFC00;"></div>
+                    <span>🌿 Grassland (Prairies)</span>
+                </div>
+                <div class="legend">
+                    <div class="color-box" style="background: #228B22;"></div>
+                    <span>🌴 Jungle (Tropicales)</span>
+                </div>
+                <div class="legend">
+                    <div class="color-box" style="background: #E0FFFF;"></div>
+                    <span>❄️ Snowy (Glacées)</span>
+                </div>
+                <div class="legend">
+                    <div class="color-box" style="background: #87CEEB;"></div>
+                    <span>🏔️ Tundra (Froides)</span>
+                </div>
+                <div class="legend">
+                    <div class="color-box" style="background: #D2691E;"></div>
+                    <span>🏜️ Arid (Déserts)</span>
+                </div>
+                <div class="legend">
+                    <div class="color-box" style="background: #F4A460;"></div>
+                    <span>🏖️ Sandy (Sable)</span>
+                </div>
+                <div class="legend">
+                    <div class="color-box" style="background: #C0C0C0;"></div>
+                    <span>🌫️ Dusty (Poussiéreuses)</span>
+                </div>
+                <div class="legend">
+                    <div class="color-box" style="background: #FF4500;"></div>
+                    <span>🔴 Martian (Type Mars)</span>
+                </div>
+                <div class="legend">
+                    <div class="color-box" style="background: #696969;"></div>
+                    <span>⚫ Barren (Stériles)</span>
+                </div>
+                <div class="legend">
+                    <div class="color-box" style="background: #556B2F;"></div>
+                    <span>🌿 Marshy (Marécages)</span>
+                </div>
+                <div class="legend">
+                    <div class="color-box" style="background: #FFA500;"></div>
+                    <span>⛽ Gaseous (Géantes)</span>
+                </div>
+                <div class="legend">
+                    <div class="color-box" style="background: #4169E1;"></div>
+                    <span>💠 Methane (Glace)</span>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>💡 Instructions</h2>
+                <div class="instructions">
+                    <p><strong>Navigation :</strong></p>
+                    <ul style="margin-left: 20px;">
+                        <li>Clic gauche + glisser : Rotation</li>
+                        <li>Molette : Zoom</li>
+                        <li>Clic droit + glisser : Pan</li>
+                    </ul>
+                    <br>
+                    <p><strong>Console (F12) :</strong></p>
+                    <code>solarSystemScript.exoplanetSceneManager.displayInfo()</code>
+                    <br><br>
+                    <p><strong>Afficher les données :</strong></p>
+                    <code>window.currentExoplanets</code>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>ℹ️ Informations</h2>
+                <div class="info-box">
+                    <strong>✅ Fonctionnalités actives :</strong><br>
+                    • Classification automatique (12 types)<br>
+                    • Orbites colorées par type<br>
+                    • Animation orbitale réaliste<br>
+                    • Rotation des planètes<br>
+                    • Textures PNG (ou couleurs)<br>
+                    • Nettoyage automatique
+                </div>
+            </div>
+        </div>
+
+        <div class="canvas-area" id="canvas-container">
+            <!-- Le canvas Three.js sera injecté ici par script.js -->
+        </div>
+    </div>
+
+    <script type="module" src="./script.js"></script>
+    <script>
+        // Attendre que le script soit chargé
+        window.addEventListener('load', () => {
+            console.log('🚀 Page de test Exoplanètes 3D chargée');
+            console.log('💡 Cliquez sur un système dans la sidebar pour commencer');
+        });
+
+        function loadSystem(systemName) {
+            console.clear();
+            console.log(`\n${'='.repeat(80)}`);
+            console.log(`🌌 CHARGEMENT DU SYSTÈME ${systemName}`);
+            console.log(`${'='.repeat(80)}\n`);
+            
+            // Vérifier que le script est chargé
+            if (window.solarSystemScript && window.solarSystemScript.routeHandler) {
+                window.solarSystemScript.routeHandler.navigateToKeplerSystem(systemName);
+                
+                // Message de confirmation
+                console.log(`✅ Commande envoyée pour charger ${systemName}`);
+                console.log(`📊 Consultez ci-dessous les détails de classification et création 3D`);
+            } else {
+                console.error('❌ Le système n\'est pas encore initialisé. Attendez quelques secondes...');
+                setTimeout(() => loadSystem(systemName), 1000);
+            }
+        }
+
+        // Exposer la fonction globalement
+        window.loadSystem = loadSystem;
+    </script>
+</body>
+</html>

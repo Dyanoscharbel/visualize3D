@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Route Kepler</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .info-box {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+
+        .info-box h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .info-box code {
+            background: #e0e7ff;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #5145cd;
+        }
+
+        .test-links {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .test-link {
+            display: block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .test-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .test-link h3 {
+            margin-bottom: 5px;
+            font-size: 1.3em;
+        }
+
+        .test-link p {
+            margin: 0;
+            opacity: 0.9;
+            font-size: 0.95em;
+        }
+
+        .instructions {
+            background: #fff9e6;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .instructions h3 {
+            color: #f57c00;
+            margin-bottom: 10px;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+            color: #666;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+        }
+
+        .console-hint {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .console-hint h3 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+
+        .console-hint p {
+            margin: 0;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌌 Test Route Kepler</h1>
+        <p>Testez le système de routage des exoplanètes</p>
+
+        <div class="info-box">
+            <h3>📍 Route actuelle</h3>
+            <p>Vous êtes sur : <code id="current-url"></code></p>
+        </div>
+
+        <div class="instructions">
+            <h3>📝 Instructions</h3>
+            <ol>
+                <li>Cliquez sur un des liens ci-dessous</li>
+                <li>Ouvrez la console du navigateur (F12)</li>
+                <li>Observez les données affichées dans la console</li>
+                <li>Le backend doit être démarré sur le port 3001</li>
+            </ol>
+        </div>
+
+        <div class="test-links">
+            <a href="/kepler-10" class="test-link">
+                <h3>🪐 Kepler-10</h3>
+                <p>Système avec 2 planètes confirmées (Kepler-10 b et c)</p>
+            </a>
+
+            <a href="/kepler-11" class="test-link">
+                <h3>🪐 Kepler-11</h3>
+                <p>Système avec 6 planètes confirmées</p>
+            </a>
+
+            <a href="/kepler-186" class="test-link">
+                <h3>🪐 Kepler-186</h3>
+                <p>Système célèbre avec Kepler-186f (zone habitable)</p>
+            </a>
+
+            <a href="/kepler-442" class="test-link">
+                <h3>🪐 Kepler-442</h3>
+                <p>Système avec une super-Terre potentiellement habitable</p>
+            </a>
+
+            <a href="/kepler-452" class="test-link">
+                <h3>🪐 Kepler-452</h3>
+                <p>Système avec "le cousin de la Terre"</p>
+            </a>
+        </div>
+
+        <div class="console-hint">
+            <h3>💡 Astuce Console</h3>
+            <p>Les données s'affichent automatiquement dans la console avec des tableaux formatés et des couleurs ! 
+            Ouvrez F12 → Onglet Console</p>
+        </div>
+
+        <div class="info-box">
+            <h3>🔧 Commandes utiles dans la console</h3>
+            <p><code>solarSystemApp.getRouteHandler().getCurrentRoute()</code> - Voir la route actuelle</p>
+            <p><code>solarSystemApp.getRouteHandler().getCurrentSystem()</code> - Voir les données du système</p>
+        </div>
+    </div>
+
+    <script>
+        // Afficher l'URL actuelle
+        document.getElementById('current-url').textContent = window.location.pathname || '/';
+    </script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Système Solaire - Explorateur d'Exoplanètes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <div class="orbit-animation">
+                    <div class="planet"></div>
+                </div>
+            </div>
+            <h2>Chargement du Système Solaire</h2>
+            <div class="loading-bar">
+                <div class="loading-progress" id="loading-progress"></div>
+            </div>
+            <p id="loading-text">Initialisation...</p>
+        </div>
+    </div>
+
+    <!-- Main Interface -->
+    <div id="app" class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🌌</span>
+                    <span class="logo-text">SolarScope</span>
+                </div>
+                <nav class="nav">
+                    <button class="nav-btn active" data-mode="exploration">Exploration</button>
+                    <button class="nav-btn" data-mode="analysis">Analyse IA</button>
+                    <button class="nav-btn" data-mode="data">Données NASA</button>
+                </nav>
+                <div class="header-actions">
+                    <button class="btn-icon" id="settings-btn" title="Paramètres">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                    </button>
+                    <button class="btn-icon" id="fullscreen-btn" title="Plein écran">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- 3D Canvas Container -->
+        <div id="canvas-container" class="canvas-container">
+            <!-- Le canvas THREE.js sera injecté ici -->
+        </div>
+
+        <!-- Side Panel -->
+        <aside class="side-panel" id="side-panel">
+            <div class="panel-header">
+                <h3>Informations</h3>
+                <button class="btn-icon panel-close" id="panel-close">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="panel-content" id="panel-content">
+                <!-- Contenu dynamique -->
+            </div>
+        </aside>
+
+        <!-- Bottom Controls -->
+        <div class="bottom-controls">
+            <div class="controls-section">
+                <div class="control-group">
+                    <label>Vitesse d'orbite</label>
+                    <div class="slider-container">
+                        <input type="range" id="orbit-speed" min="0" max="10" value="1" step="0.1" class="slider">
+                        <span class="slider-value">1x</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>Vitesse de rotation</label>
+                    <div class="slider-container">
+                        <input type="range" id="rotation-speed" min="0" max="10" value="1" step="0.1" class="slider">
+                        <span class="slider-value">1x</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>Échelle</label>
+                    <div class="toggle-group">
+                        <button class="toggle-btn active" data-scale="realistic">Réaliste</button>
+                        <button class="toggle-btn" data-scale="visual">Visuelle</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="view-controls">
+                <button class="view-btn" data-view="overview" title="Vue d'ensemble">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <circle cx="12" cy="12" r="6"></circle>
+                        <circle cx="12" cy="12" r="2"></circle>
+                    </svg>
+                </button>
+                <button class="view-btn" data-view="inner" title="Système interne">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="4"></circle>
+                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+                    </svg>
+                </button>
+                <button class="view-btn" data-view="outer" title="Système externe">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 6v6l4 2"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Planet Search -->
+        <div class="search-container">
+            <div class="search-box">
+                <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input type="text" placeholder="Rechercher une planète..." id="planet-search">
+                <div class="search-results" id="search-results"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

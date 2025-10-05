@@ -1,0 +1,48 @@
+{
+  "name": "solar-system-explorer",
+  "version": "2.0.0",
+  "description": "Explorateur 3D du système solaire avec IA pour l'identification d'exoplanètes",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve": "vite preview --host",
+    "lint": "eslint src --ext .js",
+    "format": "prettier --write src/**/*.{js,css,html}"
+  },
+  "keywords": [
+    "solar-system",
+    "three.js",
+    "3d",
+    "astronomy",
+    "exoplanets",
+    "nasa",
+    "ai",
+    "space",
+    "education"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "three": "^0.160.0",
+    "dat.gui": "^0.7.9"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "eslint": "^8.56.0",
+    "prettier": "^3.1.0",
+    "@vitejs/plugin-legacy": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/solar-system-explorer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/solar-system-explorer/issues"
+  },
+  "homepage": "https://github.com/your-username/solar-system-explorer#readme"
+}

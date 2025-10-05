@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Kepler - Rayon du Soleil</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000;
+            overflow: hidden;
+        }
+
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .controls-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #667eea;
+            border-radius: 15px;
+            padding: 20px;
+            min-width: 320px;
+            max-width: 400px;
+            color: white;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+        }
+
+        .controls-panel h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .info-section {
+            margin-bottom: 20px;
+        }
+
+        .info-section h3 {
+            color: #a8b3ff;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-section p {
+            color: #ddd;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .info-section code {
+            background: rgba(102, 126, 234, 0.2);
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #8b9eff;
+            font-family: 'Courier New', monospace;
+        }
+
+        .button-group {
+            display: grid;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .current-star {
+            background: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+
+        .current-star h3 {
+            color: #ffc107;
+            margin-bottom: 8px;
+        }
+
+        .current-star .star-info {
+            display: grid;
+            gap: 5px;
+        }
+
+        .current-star .star-info div {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9em;
+        }
+
+        .current-star .star-info div span:first-child {
+            color: #aaa;
+        }
+
+        .current-star .star-info div span:last-child {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .instructions {
+            background: rgba(76, 175, 80, 0.1);
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .instructions h3 {
+            color: #4caf50;
+            margin-bottom: 8px;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+            color: #ddd;
+            font-size: 0.9em;
+        }
+
+        .instructions li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+    
+    <div class="controls-panel">
+        <h2>🌟 Test Rayon du Soleil</h2>
+        
+        <div class="instructions">
+            <h3>📝 Instructions</h3>
+            <ol>
+                <li>Observez le Soleil au centre</li>
+                <li>Cliquez sur un système Kepler</li>
+                <li>Le Soleil changera de taille !</li>
+                <li>Ouvrez la console (F12) pour voir les détails</li>
+            </ol>
+        </div>
+
+        <div class="info-section">
+            <h3>🎯 Systèmes à tester</h3>
+            <p>Cliquez pour changer le rayon du Soleil selon l'étoile du système</p>
+        </div>
+
+        <div class="button-group">
+            <button class="btn" onclick="loadKeplerSystem('Kepler-10')">
+                🪐 Kepler-10
+                <br><small style="opacity: 0.8;">Étoile: 0.91 R☉ (plus petite)</small>
+            </button>
+            
+            <button class="btn" onclick="loadKeplerSystem('Kepler-11')">
+                🪐 Kepler-11
+                <br><small style="opacity: 0.8;">Étoile: 1.1 R☉ (légèrement plus grande)</small>
+            </button>
+            
+            <button class="btn" onclick="loadKeplerSystem('Kepler-186')">
+                🪐 Kepler-186
+                <br><small style="opacity: 0.8;">Naine rouge: 0.54 R☉ (très petite)</small>
+            </button>
+            
+            <button class="btn" onclick="loadKeplerSystem('Kepler-452')">
+                🪐 Kepler-452
+                <br><small style="opacity: 0.8;">Étoile: 1.11 R☉ (plus grande)</small>
+            </button>
+            
+            <button class="btn btn-secondary" onclick="resetToSolarSystem()">
+                🔄 Réinitialiser
+                <br><small style="opacity: 0.8;">Retour au Soleil normal (1.0 R☉)</small>
+            </button>
+        </div>
+
+        <div class="current-star" id="starInfo" style="display: none;">
+            <h3>⭐ Étoile Actuelle</h3>
+            <div class="star-info">
+                <div>
+                    <span>Nom:</span>
+                    <span id="starName">-</span>
+                </div>
+                <div>
+                    <span>Rayon:</span>
+                    <span id="starRadius">-</span>
+                </div>
+                <div>
+                    <span>Masse:</span>
+                    <span id="starMass">-</span>
+                </div>
+                <div>
+                    <span>Température:</span>
+                    <span id="starTemp">-</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section" style="margin-top: 20px;">
+            <h3>💡 Astuce</h3>
+            <p>Utilisez la molette pour zoomer et observer les changements de taille du Soleil !</p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { SolarSystemApp } from './js/main.js';
+
+        // Fonctions globales pour les boutons
+        window.loadKeplerSystem = async function(keplerName) {
+            console.clear();
+            console.log(`\n🚀 Chargement du système ${keplerName}...\n`);
+            
+            if (window.solarSystemApp && window.solarSystemApp.getRouteHandler()) {
+                const routeHandler = window.solarSystemApp.getRouteHandler();
+                await routeHandler.navigateToKeplerSystem(keplerName);
+                
+                // Attendre un peu que les données se chargent
+                setTimeout(() => {
+                    const system = routeHandler.getCurrentSystem();
+                    if (system) {
+                        const star = system.data?.star || system.star;
+                        if (star) {
+                            updateStarInfo(star);
+                        }
+                    }
+                }, 1000);
+            }
+        };
+
+        window.resetToSolarSystem = function() {
+            console.clear();
+            console.log('\n🔄 Retour au système solaire...\n');
+            
+            if (window.solarSystemApp && window.solarSystemApp.getRouteHandler()) {
+                window.solarSystemApp.getRouteHandler().navigateToSolarSystem();
+                hideStarInfo();
+            }
+        };
+
+        function updateStarInfo(star) {
+            const starInfo = document.getElementById('starInfo');
+            starInfo.style.display = 'block';
+            
+            document.getElementById('starName').textContent = star.name || '-';
+            document.getElementById('starRadius').textContent = star.radius ? `${star.radius.toFixed(2)} R☉` : '-';
+            document.getElementById('starMass').textContent = star.mass ? `${star.mass.toFixed(2)} M☉` : '-';
+            document.getElementById('starTemp').textContent = star.temperature ? `${star.temperature.toFixed(0)} K` : '-';
+        }
+
+        function hideStarInfo() {
+            document.getElementById('starInfo').style.display = 'none';
+        }
+
+        // Écouter les événements de changement d'étoile
+        window.addEventListener('kepler-system-loaded', (event) => {
+            console.log('🎉 Événement kepler-system-loaded reçu', event.detail);
+        });
+    </script>
+</body>
+</html>
