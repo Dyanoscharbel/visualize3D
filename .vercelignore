@@ -1,0 +1,14 @@
+# Textures sources (on utilise les copies dans images/)
+src/images/textures_exoplanet/
+
+# Fichiers temporaires
+*.log
+*.tmp
+.DS_Store
+
+# Scripts de développement
+test-*.html
+copy-assets.js
+
+# Node modules
+node_modules/

@@ -1,0 +1,219 @@
+{
+  "frames": {
+    "Gaseous01.png": {
+      "frame": {
+        "x": 4,
+        "y": 4,
+        "w": 1024,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1024,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 512
+      }
+    },
+    "Gaseous02.png": {
+      "frame": {
+        "x": 1032,
+        "y": 4,
+        "w": 1024,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1024,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 512
+      }
+    },
+    "Gaseous03.png": {
+      "frame": {
+        "x": 2060,
+        "y": 4,
+        "w": 1024,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1024,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 512
+      }
+    },
+    "Gaseous04.png": {
+      "frame": {
+        "x": 3088,
+        "y": 4,
+        "w": 1024,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1024,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 512
+      }
+    },
+    "Gaseous05.png": {
+      "frame": {
+        "x": 4,
+        "y": 520,
+        "w": 1024,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1024,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 512
+      }
+    },
+    "Gaseous06.png": {
+      "frame": {
+        "x": 1032,
+        "y": 520,
+        "w": 1024,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1024,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 512
+      }
+    },
+    "Gaseous07.png": {
+      "frame": {
+        "x": 2060,
+        "y": 520,
+        "w": 1024,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1024,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 512
+      }
+    },
+    "Gaseous08.png": {
+      "frame": {
+        "x": 3088,
+        "y": 520,
+        "w": 1024,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1024,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 512
+      }
+    },
+    "Gaseous09.png": {
+      "frame": {
+        "x": 4,
+        "y": 1036,
+        "w": 1024,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1024,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 512
+      }
+    },
+    "Gaseous10.png": {
+      "frame": {
+        "x": 1032,
+        "y": 1036,
+        "w": 1024,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1024,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 512
+      }
+    }
+  },
+  "meta": {
+    "app": "Cascade Atlas Builder",
+    "version": 1,
+    "image": "Gaseous_atlas.png",
+    "size": {
+      "w": 4116,
+      "h": 1552
+    },
+    "scale": "1",
+    "padding": 4,
+    "grid": {
+      "columns": 4,
+      "rows": 3
+    }
+  }
+}

@@ -18,7 +18,7 @@ export class ExoplanetAPIService {
         try {
             console.log(`🌌 Récupération du système ${keplerName}...`);
             
-            const response = await fetch(`${this.baseURL}/exoplanets/system/${keplerName}`);
+            const response = await fetch(`${this.baseURL}/system/${keplerName}`);
             
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
@@ -46,7 +46,7 @@ export class ExoplanetAPIService {
      */
     async searchSystems(searchTerm = '', limit = 50) {
         try {
-            const response = await fetch(`${this.baseURL}/exoplanets/search?q=${encodeURIComponent(searchTerm)}&limit=${limit}`);
+            const response = await fetch(`${this.baseURL}/search?q=${encodeURIComponent(searchTerm)}&limit=${limit}`);
             
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);

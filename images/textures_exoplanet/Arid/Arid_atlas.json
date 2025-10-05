@@ -1,0 +1,119 @@
+{
+  "frames": {
+    "Arid01.png": {
+      "frame": {
+        "x": 4,
+        "y": 4,
+        "w": 1024,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1024,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 512
+      }
+    },
+    "Arid02.png": {
+      "frame": {
+        "x": 1032,
+        "y": 4,
+        "w": 1024,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1024,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 512
+      }
+    },
+    "Arid03.png": {
+      "frame": {
+        "x": 2060,
+        "y": 4,
+        "w": 1024,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1024,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 512
+      }
+    },
+    "Arid04.png": {
+      "frame": {
+        "x": 4,
+        "y": 520,
+        "w": 1024,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1024,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 512
+      }
+    },
+    "Arid05.png": {
+      "frame": {
+        "x": 1032,
+        "y": 520,
+        "w": 1024,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1024,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 512
+      }
+    }
+  },
+  "meta": {
+    "app": "Cascade Atlas Builder",
+    "version": 1,
+    "image": "Arid_atlas.png",
+    "size": {
+      "w": 3088,
+      "h": 1036
+    },
+    "scale": "1",
+    "padding": 4,
+    "grid": {
+      "columns": 3,
+      "rows": 2
+    }
+  }
+}
