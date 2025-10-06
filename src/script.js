@@ -228,7 +228,7 @@ function createKeplerSidebar() {
         letter-spacing: 0.5px;
       ">
         <span style="font-size: 16px;">🔬</span>
-        <span>KOI Data Explorer</span>
+        <span>KNYXAI_Projectr</span>
       </button>
     </div>
   `;
@@ -333,7 +333,7 @@ function createSolarSystemSidebar() {
         letter-spacing: 0.5px;
       ">
         <span style="font-size: 16px;">🔬</span>
-        <span>KOI Data Explorer</span>
+        <span>KNyxAI_project</span>
       </button>
     </div>
   `;
@@ -447,7 +447,7 @@ function setupKeplerSidebarEvents() {
   
   if (koiButton) {
     koiButton.addEventListener('click', () => {
-      console.log('🔬 Ouverture de KOI Data Explorer');
+      console.log('🔬 Ouverture de NYXAI_Project');
       window.open('https://nyx-a-ifront-q25a.vercel.app', '_blank');
     });
   }
@@ -1064,7 +1064,7 @@ function addKOIDataExplorerButton() {
         gap: 8px;
       ">
         <span style="font-size: 16px;">🔬</span>
-        <span>KOI Data Explorer</span>
+        <span>NYXAI_Project</span>
       </button>
     </div>
   `;
