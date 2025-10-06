@@ -1,147 +1,177 @@
-/**
- * 🔄 ExoplanetManagerIntegration
- * 
- * Fichier d'intégration pour remplacer facilement l'ancien ExoplanetSceneManager
- * par la version avancée avec toutes les fonctionnalités du système solaire.
- * 
- * INSTRUCTIONS D'UTILISATION :
- * 1. Remplacer l'import dans script.js
- * 2. Mettre à jour l'initialisation
- * 3. Configurer les ombres dans le renderer
- */
-
-import * as THREE from 'three';
-import { ExoplanetSceneManagerAdvanced } from '../generators/ExoplanetSceneManagerAdvanced.js';
+import { API_CONFIG, buildApiUrl } from '../config/api.js';
 
 /**
- * Configuration requise pour les fonctionnalités avancées
+ * Service pour communiquer avec l'API backend des exoplanètes
  */
-export function configureAdvancedRendering(renderer, scene) {
-    console.log('🔧 Configuration du rendu avancé...');
+export class ExoplanetAPIService {
     
-    // Activer les ombres
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Ombres douces
-    
-    // Améliorer la qualité du rendu
-    renderer.physicallyCorrectLights = true;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.0;
-    
-    console.log('✅ Rendu avancé configuré');
-}
-
-/**
- * Initialise le manager avancé avec la configuration optimale
- */
-export function initializeAdvancedExoplanetManager(scene, camera, renderer) {
-    console.log('🚀 Initialisation du ExoplanetSceneManagerAdvanced...');
-    
-    // Configurer le rendu avancé
-    configureAdvancedRendering(renderer, scene);
-    
-    // Créer le manager avancé
-    const advancedManager = new ExoplanetSceneManagerAdvanced(scene, camera, renderer);
-    
-    // Configuration des facteurs d'échelle (identiques au système solaire)
-    advancedManager.setScaleFactors({
-        distance: 7504,  // 1 UA = 7504 unités
-        radius: 10       // Multiplicateur pour les rayons
-    });
-    
-    console.log('✅ ExoplanetSceneManagerAdvanced prêt avec fonctionnalités avancées');
-    return advancedManager;
-}
-
-/**
- * Fonction de migration pour remplacer l'ancien manager
- */
-export function migrateToAdvancedManager(oldManager, scene, camera, renderer) {
-    console.log('🔄 Migration vers ExoplanetSceneManagerAdvanced...');
-    
-    // Sauvegarder les données actuelles si elles existent
-    let currentExoplanets = null;
-    if (oldManager && oldManager.exoplanets && oldManager.exoplanets.length > 0) {
-        console.log(`📦 Sauvegarde de ${oldManager.exoplanets.length} exoplanètes existantes`);
-        currentExoplanets = window.currentExoplanets;
+    constructor(baseURL = buildApiUrl(API_CONFIG.ENDPOINTS.EXOPLANETS)) {
+        this.baseURL = baseURL;
     }
     
-    // Nettoyer l'ancien manager
-    if (oldManager && typeof oldManager.clearExoplanets === 'function') {
-        oldManager.clearExoplanets();
+    /**
+     * Récupérer un système d'exoplanètes
+     * @param {string} keplerName - Nom du système Kepler (ex: "Kepler-257")
+     * @returns {Promise<Object>} Données du système
+     */
+    async getKeplerSystem(keplerName) {
+        try {
+            console.log(`🌌 Récupération du système ${keplerName}...`);
+            
+            // Construire l'URL de façon robuste en utilisant la config centralisée
+            const endpoint = `${API_CONFIG.ENDPOINTS.EXOPLANETS}/system/${encodeURIComponent(keplerName)}`;
+            const url = buildApiUrl(endpoint);
+            console.log('🔗 Exoplanet fetch URL:', url, ' (baseURL was:', this.baseURL, ')');
+
+            let response = await fetch(url);
+
+            // If backend returned 404 and URL contains a duplicated segment like
+            // '/api/exoplanets/exoplanets/', try a corrected URL once.
+            if (!response.ok && response.status === 404 && url.includes('/exoplanets/exoplanets/')) {
+                try {
+                    const altUrl = url.replace('/exoplanets/exoplanets/', '/exoplanets/');
+                    console.warn('⚠️ 404 for exoplanet URL, retrying with corrected URL:', altUrl);
+                    const retryResp = await fetch(altUrl);
+                    if (retryResp.ok) {
+                        const retryData = await retryResp.json().catch(() => ({}));
+                        console.log('🔁 Récupération via URL corrigée réussie:', altUrl);
+                        return retryData;
+                    }
+                    // If retry also failed, fall through to report original error
+                    console.warn('❌ Tentative avec URL corrigée a échoué:', retryResp.status, retryResp.statusText);
+                } catch (retryError) {
+                    console.warn('❌ Erreur lors de la tentative de retry:', retryError);
+                }
+            }
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || `HTTP ${response.status}: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            console.log(`✅ Système ${keplerName} récupéré:`, data);
+            
+            return data;
+            
+        } catch (error) {
+            console.error(`❌ Erreur lors de la récupération de ${keplerName}:`, error);
+            
+            // Retourner un système fictif pour les tests si l'API échoue
+            return this.createMockSystem(keplerName);
+        }
     }
     
-    // Initialiser le nouveau manager
-    const newManager = initializeAdvancedExoplanetManager(scene, camera, renderer);
-    
-    // Recréer les exoplanètes avec les fonctionnalités avancées
-    if (currentExoplanets && currentExoplanets.length > 0) {
-        console.log('🔄 Recréation des exoplanètes avec fonctionnalités avancées...');
-        
-        // Récupérer le rayon actuel du soleil
-        const currentSunRadius = window.sun ? window.sun.geometry.parameters.radius : 698.88;
-        
-        // Recréer avec le manager avancé
-        newManager.createExoplanets(currentExoplanets, currentSunRadius);
-        
-        console.log('✅ Migration terminée avec succès');
+    /**
+     * Rechercher des systèmes disponibles
+     * @param {string} searchTerm - Terme de recherche
+     * @param {number} limit - Limite de résultats
+     * @returns {Promise<Array>} Liste des systèmes
+     */
+    async searchSystems(searchTerm = '', limit = 50) {
+        try {
+            // Use centralized URL builder to avoid duplicated segments or wrong joins
+            const endpoint = `${API_CONFIG.ENDPOINTS.EXOPLANETS}/search?q=${encodeURIComponent(searchTerm)}&limit=${limit}`;
+            const url = buildApiUrl(endpoint);
+            console.log('🔎 Search systems URL:', url);
+
+            const response = await fetch(url);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const data = await response.json();
+            return data.systems || [];
+            
+        } catch (error) {
+            console.error('❌ Erreur lors de la recherche:', error);
+            return [];
+        }
     }
     
-    return newManager;
+    /**
+     * Créer un système fictif pour les tests
+     * @param {string} keplerName - Nom du système
+     * @returns {Object} Système fictif
+     */
+    createMockSystem(keplerName) {
+        console.log(`🧪 Création d'un système fictif pour ${keplerName}`);
+        
+        // Générer des exoplanètes fictives basées sur le nom
+        const planetCount = Math.floor(Math.random() * 6) + 2; // 2-7 planètes
+        const exoplanets = [];
+        
+        for (let i = 0; i < planetCount; i++) {
+            const planetName = `${keplerName}.${String(i + 1).padStart(2, '0')}`;
+            
+            // Génération aléatoire mais cohérente
+            const distance = 0.1 + (i * 0.3) + (Math.random() * 0.2); // UA
+            const radius = 0.5 + (Math.random() * 4); // R⊕
+            const temperature = 50 + (Math.random() * 800); // K
+            
+            // Classification basée sur les propriétés générées
+            const classification = this.classifyMockPlanet(radius, temperature, distance);
+            
+            exoplanets.push({
+                name: planetName,
+                kepoi_name: `KOI-${Math.floor(Math.random() * 9999)}`,
+                radius,
+                temperature,
+                distance,
+                starMass: 1.0 + (Math.random() * 0.5), // M☉
+                starRadius: 0.8 + (Math.random() * 0.7), // R☉
+                classification: classification.type,
+                planetType: classification.category,
+                texture: classification.texture,
+                description: classification.description,
+                confidence: 0.8,
+                originalData: {
+                    koi_prad: radius,
+                    koi_teq: temperature,
+                    koi_sma: distance
+                }
+            });
+        }
+        
+        return {
+            success: true,
+            systemName: keplerName,
+            exoplanets,
+            star: {
+                name: keplerName.replace('-', ' '),
+                mass: 1.0 + (Math.random() * 0.5),
+                radius: 0.8 + (Math.random() * 0.7),
+                temperature: 5000 + (Math.random() * 2000),
+                type: 'G-type'
+            },
+            totalPlanets: exoplanets.length,
+            message: `Système fictif ${keplerName} généré pour les tests`,
+            isMock: true
+        };
+    }
+    
+    /**
+     * Classification simple pour les planètes fictives
+     * @param {number} radius - Rayon en R⊕
+     * @param {number} temperature - Température en K
+     * @param {number} distance - Distance en UA
+     * @returns {Object} Classification
+     */
+    classifyMockPlanet(radius, temperature, distance) {
+        // Géantes gazeuses
+        if (radius > 3) {
+            if (temperature < 150) return { type: 'methane', category: 'gas_giant', texture: 'Methane', description: 'Géante froide riche en méthane' };
+            return { type: 'gaseous', category: 'gas_giant', texture: 'Gaseous', description: 'Géante gazeuse' };
+        }
+        
+        // Planètes terrestres
+        if (temperature > 350) return { type: 'arid', category: 'arid', texture: 'Arid', description: 'Monde désertique chaud' };
+        if (temperature < 200) return { type: 'snowy', category: 'terrestrial', texture: 'Snowy', description: 'Monde glacé' };
+        if (temperature > 280 && distance < 1.2) return { type: 'jungle', category: 'terrestrial', texture: 'Jungle', description: 'Monde tropical' };
+        if (distance > 1.5) return { type: 'tundra', category: 'terrestrial', texture: 'Tundra', description: 'Monde froid' };
+        
+        // Par défaut
+        return { type: 'grassland', category: 'terrestrial', texture: 'Grassland', description: 'Monde tempéré' };
+    }
 }
-
-/**
- * Instructions pour l'intégration dans script.js
- */
-export const INTEGRATION_INSTRUCTIONS = `
-🔧 INSTRUCTIONS D'INTÉGRATION :
-
-1. REMPLACER L'IMPORT :
-   // Ancien
-   import { ExoplanetSceneManager } from './js/generators/ExoplanetSceneManager.js';
-   
-   // Nouveau
-   import { initializeAdvancedExoplanetManager } from './js/integration/ExoplanetManagerIntegration.js';
-
-2. REMPLACER L'INITIALISATION :
-   // Ancien
-   exoplanetSceneManager = new ExoplanetSceneManager(scene, camera);
-   
-   // Nouveau
-   exoplanetSceneManager = initializeAdvancedExoplanetManager(scene, camera, renderer);
-
-3. VÉRIFIER QUE LE RENDERER EST DISPONIBLE :
-   Assurez-vous que la variable 'renderer' est accessible lors de l'initialisation.
-
-4. FONCTIONNALITÉS AJOUTÉES :
-   ✅ Matériaux avec bump mapping
-   ✅ Atmosphères conditionnelles
-   ✅ Anneaux pour géantes gazeuses  
-   ✅ Lunes procédurales
-   ✅ Éclairage et ombres réalistes
-   ✅ Effets émissifs pour planètes chaudes
-   ✅ Sélection avancée avec lunes
-   ✅ Marqueurs/cercles pour exoplanètes (intégration PlanetMarkerSystem)
-   ✅ Couleurs des marqueurs selon type d'exoplanète
-   ✅ Noms des exoplanètes depuis le backend
-   ✅ Nettoyage automatique des marqueurs
-
-5. COMPATIBILITÉ :
-   Le nouveau manager est 100% compatible avec l'ancien.
-   Toutes les méthodes existantes fonctionnent identiquement.
-   
-6. SYSTÈME DE MARQUEURS :
-   Les exoplanètes sont automatiquement intégrées au PlanetMarkerSystem existant.
-   Elles apparaissent avec des cercles colorés selon leur type et restent visibles au zoom.
-   Les marqueurs sont automatiquement nettoyés lors du retour au système solaire.
-`;
-
-console.log(INTEGRATION_INSTRUCTIONS);
-
-export default {
-    ExoplanetSceneManagerAdvanced,
-    initializeAdvancedExoplanetManager,
-    migrateToAdvancedManager,
-    configureAdvancedRendering,
-    INTEGRATION_INSTRUCTIONS
-};
