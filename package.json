@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run copy-assets && vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "copy-assets": "node copy-assets.js",
-    "vercel-build": "npm run copy-assets && npm run build"
+    "vercel-build": "npm run build"
   },
   "devDependencies": {
     "vite": "^4.5.0"
