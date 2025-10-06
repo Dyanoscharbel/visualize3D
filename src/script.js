@@ -448,7 +448,7 @@ function setupKeplerSidebarEvents() {
   if (koiButton) {
     koiButton.addEventListener('click', () => {
       console.log('🔬 Ouverture de KOI Data Explorer');
-      window.open('https://koi-data-explorer.vercel.app', '_blank');
+      window.open('https://nyx-a-ifront-q25a.vercel.app', '_blank');
     });
   }
   
@@ -468,7 +468,7 @@ function setupSolarSystemSidebarEvents() {
   const koiButton = document.getElementById('koi-data-explorer-button');
   if (koiButton) {
     koiButton.addEventListener('click', () => {
-      window.open('https://koi-data-explorer.vercel.app', '_blank');
+      window.open('https://nyx-a-ifront-q25a.vercel.app', '_blank');
     });
   }
   
@@ -1089,7 +1089,7 @@ function addKOIDataExplorerButton() {
       console.log('🔬 Ouverture de KOI Data Explorer');
       
       // Ouvrir le lien dans un nouvel onglet
-      window.open('https://koi-data-explorer.vercel.app', '_blank');
+      window.open('https://nyx-a-ifront-q25a.vercel.app', '_blank');
       
       // Feedback visuel
       explorerButton.style.background = 'linear-gradient(135deg, #4CAF50, #45a049)';
@@ -3698,7 +3698,7 @@ function showPlanetInfo(objectName, objectType = 'planet') {
         info: 'Kepler was a NASA space telescope designed to discover Earth-sized planets orbiting other stars. It discovered more than 2,600 confirmed exoplanets.',
         dataButton: {
           text: 'View collected data',
-          url: 'https://koi-data-explorer.vercel.app',
+          url: 'https://nyx-a-ifront-q25a.vercel.app',
           description: 'Explore exoplanet data discovered by Kepler'
         }
       };
@@ -3718,7 +3718,7 @@ function showPlanetInfo(objectName, objectType = 'planet') {
         info: 'Kepler was a NASA space telescope designed to discover Earth-sized planets orbiting other stars',
         dataButton: {
           text: 'View collected data',
-          url: 'https://koi-data-explorer.vercel.app',
+          url: 'https://nyx-a-ifront-q25a.vercel.app',
           description: 'Explore exoplanet data discovered by Kepler'
         }
       };
